@@ -1,0 +1,9 @@
+// Color System
+$default: #1698d9;
+$selected: #d91667;
+$disabled: #b1b1b1;
+$info: #ff6;
+
+// Size
+$min-width: map-get($grid-breakpoints, sm);
+$max-width: map-get($grid-breakpoints, md);
