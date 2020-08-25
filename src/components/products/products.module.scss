@@ -1,3 +1,15 @@
+@import './src/assets/styles/index';
+
 .Products {
-  //
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  @include media-breakpoint-down(md) {
+    justify-content: center;
+  }
 }

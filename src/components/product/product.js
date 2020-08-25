@@ -1,56 +1,67 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import classnames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 import styles from './product.module.scss';
+import { pluralize } from '../product/utils';
 
-function Product() {
-  const refInput = useRef();
-  const refProduct = useRef();
-  const refAnnotation = useRef();
+function Product({ product }) {
+  const {
+    description,
+    name,
+    topping,
+    featuresMapping,
+    weight,
+    annotation,
+    isSelected,
+    isFinished,
+  } = product;
 
-  useEffect(() => {
-    const { current: input } = refInput;
-    const { current: label } = refProduct;
-
-    const handleChange = () => {
-      label.classList = `${classnames(styles.Product, {
-        [styles.ProductDefault]: !input.checked && !input.disabled,
-        [styles.ProductSelected]: input.checked && !input.disabled,
-        [styles.ProductDisabled]: input.disabled,
-      })}`;
-    };
-
-    handleChange();
-
-    input.addEventListener('change', handleChange);
-
-    return () => {
-      input.removeEventListener('change', handleChange);
-    };
-  });
+  const { enums, stuff } = featuresMapping;
 
   return (
-    <>
+    <li className={styles.Product}>
       <label
         htmlFor="cat-food"
-        ref={refProduct}
+        className={classnames(styles.ProductItem, {
+          [styles.ProductItemDefault]: !isFinished && !isSelected,
+          [styles.ProductItemSelected]: isSelected,
+          [styles.ProductItemDisabled]: isFinished,
+        })}
       >
-        <figure className={classnames(styles.ProductContainer)}>
-          <h2 className={classnames(styles.ProductTitle)}>Нямушка</h2>
-          <p className={classnames(styles.ProductTopping)}>с фуа-гра</p>
-          <ul className={classnames(styles.ProductFeatures)}>
-            <li>10 порций</li>
-            <li>мышь в подарок</li>
+        <figure className={styles.ProductContainer}>
+          <h2 className={styles.ProductTitle}>{name}</h2>
+          <p className={styles.ProductTopping}>{topping}</p>
+          <ul className={styles.ProductFeatures}>
+            {enums.map(({ plurals, count, phrase }) => {
+              const str = `${count === 1 ? '' : count} ${pluralize(
+                count,
+                plurals
+              )} ${phrase}`;
+
+              return <li key={uuidv4()}>{str}</li>;
+            })}
+            {stuff.map((str) => (
+              <li key={uuidv4()}>{str}</li>
+            ))}
           </ul>
-          <div className={classnames(styles.ProductWeight)}>0,5</div>
-          <figcaption className={classnames(styles.ProductCaption)}>
-            Сказочное заморское яство
+          <div className={styles.ProductWeight}>{weight}</div>
+          <figcaption className={styles.ProductCaption}>
+            {description}
           </figcaption>
         </figure>
       </label>
-      <input type="checkbox" id="cat-food" ref={refInput} disabled={false} />
-      <p ref={refAnnotation}></p>
-    </>
+      <input type="checkbox" id="cat-food" disabled={false} />
+      <p className={styles.ProductAnnotation}>
+        {isSelected
+          ? annotation
+          : isFinished
+          ? `Печалька, ${topping} закончился.`
+        : <>Порадуй котэ, <a href="#cat-food">купи</a>.</>}
+      </p>
+    </li>
   );
 }
 
 export default Product;
+
+// {'<span>Чего сидишь? Порадуй котэ,</span><a href="#cat-food">купи.</a>'}

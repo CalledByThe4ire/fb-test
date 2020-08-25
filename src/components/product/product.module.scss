@@ -2,95 +2,122 @@
 
 .Product {
   $Product: &;
-  $border-width: 4px;
 
-  position: relative;
   display: flex;
-  flex-flow: row wrap;
-  width: 320px;
-  height: 480px;
-  cursor: pointer;
-  border-radius: 10px;
+  flex-flow: column nowrap;
+  padding: 0;
+  padding-right: $grid-gutter-width;
+  margin: 0;
+  margin-bottom: 15px;
+  list-style: none;
 
-  &::before {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    z-index: 5;
+  @include media-breakpoint-only(lg) {
+    &:nth-child(3n) {
+      padding-right: 0;
+    }
+  }
+
+  @include media-breakpoint-only(sm) {
+    padding-right: initial;
+  }
+
+  &Item {
+    $ProductItem: &;
+    $border-width: 4px;
+
+    position: relative;
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    padding-bottom: 5px;
-    font-size: 21px;
-    color: #fff;
-    content: 'кг';
-    border-radius: 50%;
-  }
-
-  &::after {
-    position: absolute;
-    top: $border-width;
-    left: $border-width;
-    display: block;
-    width: calc(100% - #{$border-width * 2});
-    height: calc(100% - #{$border-width * 2});
-    content: '';
-    background-image: url('assets/images/cat.png'),
-      linear-gradient(135deg, transparent 30px, #fff 0);
-    background-repeat: no-repeat, no-repeat;
-    background-position: bottom -95px left -25px, center;
-    border-radius: calc(10px - #{$border-width / 2});
-  }
-
-  &Default {
-    background-image: linear-gradient(135deg, transparent 30px, $default 0);
+    flex-flow: row wrap;
+    width: 320px;
+    height: 480px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    border-radius: 10px;
 
     &::before {
-      background-color: $default;
-    }
-  }
-
-  &Selected {
-    background-image: linear-gradient(135deg, transparent 30px, $selected 0);
-
-    &::before {
-      background-color: $selected;
-    }
-  }
-
-  &Disabled {
-    cursor: not-allowed;
-    background-image: linear-gradient(135deg, transparent 30px, $disabled 0);
-
-    &::before {
-      background-color: $disabled;
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      z-index: 5;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      padding-bottom: 5px;
+      font-size: 21px;
+      color: #fff;
+      content: 'кг';
+      border-radius: 50%;
     }
 
     &::after {
-      background-image: linear-gradient(
-          to top,
-          rgba(#fff, 0.5) 50%,
-          transparent
-        ),
-        url('assets/images/cat.png'),
+      position: absolute;
+      top: $border-width;
+      left: $border-width;
+      display: block;
+      width: calc(100% - #{$border-width * 2});
+      height: calc(100% - #{$border-width * 2});
+      content: '';
+      background-image: url('assets/images/cat.png'),
         linear-gradient(135deg, transparent 30px, #fff 0);
-      background-repeat: no-repeat, no-repeat, no-repeat;
-      background-position: center, bottom -95px left -25px, center;
+      background-repeat: no-repeat, no-repeat;
+      background-position: bottom -95px left -25px, center;
+      border-radius: calc(10px - #{$border-width / 2});
     }
 
-    & #{$Product}Caption,
-    & #{$Product}Title,
-    & #{$Product}Topping,
-    & #{$Product}Features,
-    & #{$Product}Weight {
-      opacity: 50%;
-    }
-  }
+    &Default {
+      background-image: linear-gradient(135deg, transparent 30px, $default 0);
 
-  & + input {
-    display: none;
+      &::before {
+        background-color: $default;
+      }
+    }
+
+    &Selected {
+      background-image: linear-gradient(135deg, transparent 30px, $selected 0);
+
+      &::before {
+        background-color: $selected;
+      }
+    }
+
+    &Disabled {
+      cursor: not-allowed;
+      background-image: linear-gradient(135deg, transparent 30px, $disabled 0);
+
+      &::before {
+        background-color: $disabled;
+      }
+
+      &::after {
+        background-image: linear-gradient(
+            to top,
+            rgba(#fff, 0.5) 50%,
+            transparent
+          ),
+          url('assets/images/cat.png'),
+          linear-gradient(135deg, transparent 30px, #fff 0);
+        background-repeat: no-repeat, no-repeat, no-repeat;
+        background-position: center, bottom -95px left -25px, center;
+      }
+
+      & #{$ProductItem}Caption,
+      & #{$ProductItem}Title,
+      & #{$ProductItem}Topping,
+      & #{$ProductItem}Features,
+      & #{$ProductItem}Weight {
+        opacity: 50%;
+      }
+    }
+
+    &Disabled ~ #{$Product}Annotation {
+      color: $info;
+    }
+
+    & + input {
+      display: none;
+    }
   }
 
   &Container {
@@ -160,5 +187,19 @@
     line-height: 1;
     color: #fff;
     text-align: center;
+  }
+
+  &Annotation {
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+    line-height: 16px;
+    color: #fff;
+    text-align: center;
+
+    a {
+      color: $primary;
+      text-decoration-style: dashed;
+    }
   }
 }
