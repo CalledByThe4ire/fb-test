@@ -1,0 +1,164 @@
+@import './src/assets/styles/index';
+
+.Product {
+  $Product: &;
+  $border-width: 4px;
+
+  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  width: 320px;
+  height: 480px;
+  cursor: pointer;
+  border-radius: 10px;
+
+  &::before {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    z-index: 5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    padding-bottom: 5px;
+    font-size: 21px;
+    color: #fff;
+    content: 'кг';
+    border-radius: 50%;
+  }
+
+  &::after {
+    position: absolute;
+    top: $border-width;
+    left: $border-width;
+    display: block;
+    width: calc(100% - #{$border-width * 2});
+    height: calc(100% - #{$border-width * 2});
+    content: '';
+    background-image: url('assets/images/cat.png'),
+      linear-gradient(135deg, transparent 30px, #fff 0);
+    background-repeat: no-repeat, no-repeat;
+    background-position: bottom -95px left -25px, center;
+    border-radius: calc(10px - #{$border-width / 2});
+  }
+
+  &Default {
+    background-image: linear-gradient(135deg, transparent 30px, $default 0);
+
+    &::before {
+      background-color: $default;
+    }
+  }
+
+  &Selected {
+    background-image: linear-gradient(135deg, transparent 30px, $selected 0);
+
+    &::before {
+      background-color: $selected;
+    }
+  }
+
+  &Disabled {
+    cursor: not-allowed;
+    background-image: linear-gradient(135deg, transparent 30px, $disabled 0);
+
+    &::before {
+      background-color: $disabled;
+    }
+
+    &::after {
+      background-image: linear-gradient(
+          to top,
+          rgba(#fff, 0.5) 50%,
+          transparent
+        ),
+        url('assets/images/cat.png'),
+        linear-gradient(135deg, transparent 30px, #fff 0);
+      background-repeat: no-repeat, no-repeat, no-repeat;
+      background-position: center, bottom -95px left -25px, center;
+    }
+
+    & #{$Product}Caption,
+    & #{$Product}Title,
+    & #{$Product}Topping,
+    & #{$Product}Features,
+    & #{$Product}Weight {
+      opacity: 50%;
+    }
+  }
+
+  & + input {
+    display: none;
+  }
+
+  &Container {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    margin-top: 25px;
+    margin-left: 45px;
+    font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  }
+
+  &Caption {
+    order: -1;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1;
+    color: #666;
+  }
+
+  &Title {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &Topping {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &Features {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.2;
+    color: #666;
+    list-style: none;
+  }
+
+  &Weight {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    padding-bottom: 10px;
+    margin-right: auto;
+    font-size: 42px;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+  }
+}
