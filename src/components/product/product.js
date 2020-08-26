@@ -3,17 +3,22 @@ import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './product.module.scss';
 import { pluralize } from '../product/utils';
-import { useAppContext } from '../hooks';
+import { useAppContext, useHover } from '../hooks';
 import { toggleProduct } from '../../state/actions';
 
 function Product({ product }) {
   const { dispatch } = useAppContext();
 
-  const updateProduct = (productId) => () => dispatch(toggleProduct(productId));
+  const updateProduct = (event, productId) => {
+    event.preventDefault();
+    dispatch(toggleProduct(productId));
+  };
+
+  const [hoverRef, isHovered] = useHover();
 
   const {
     id: productId,
-    description,
+    descriptionMapping,
     name,
     topping,
     featuresMapping,
@@ -24,17 +29,23 @@ function Product({ product }) {
   } = product;
 
   const { enums, stuff } = featuresMapping;
+  const {
+    default: defaultDescription,
+    hovered: hoveredDescription,
+  } = descriptionMapping;
 
   return (
     <li className={styles.Product}>
       <label
         htmlFor="cat-food"
+        onClick={(event) => updateProduct(event, productId)}
         className={classnames(styles.ProductItem, {
           [styles.ProductItemDefault]: !isFinished && !isSelected,
           [styles.ProductItemSelected]: isSelected,
           [styles.ProductItemDisabled]: isFinished,
+          [styles.ProductItemHovered]: isHovered,
         })}
-        onClick={updateProduct(productId)}
+        ref={hoverRef}
       >
         <figure className={styles.ProductContainer}>
           <h2 className={styles.ProductTitle}>{name}</h2>
@@ -54,15 +65,11 @@ function Product({ product }) {
           </ul>
           <div className={styles.ProductWeight}>{weight}</div>
           <figcaption className={styles.ProductCaption}>
-            {description}
+            {isHovered && (isSelected && !isFinished) ? hoveredDescription : defaultDescription}
           </figcaption>
         </figure>
       </label>
-      <input
-        type="checkbox"
-        id="cat-food"
-        disabled={isFinished}
-      />
+      <input type="checkbox" id="cat-food" disabled={isFinished} />
       <p className={styles.ProductAnnotation}>
         {isSelected ? (
           annotation
@@ -70,7 +77,11 @@ function Product({ product }) {
           `Печалька, ${topping} закончился.`
         ) : (
           <>
-            Порадуй котэ, <a href="#/" onClick={updateProduct(productId)}>купи</a>.
+            Порадуй котэ,{' '}
+            <a href="/" onClick={(event) => updateProduct(event, productId)}>
+              купи
+            </a>
+            .
           </>
         )}
       </p>

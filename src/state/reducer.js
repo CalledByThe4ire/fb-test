@@ -4,7 +4,10 @@ import { TOGGLE_PRODUCT } from './types';
 export const initialState = [
   {
     id: uuidv4(),
-    description: 'Сказочное заморское яство',
+    descriptionMapping: {
+      default: 'Сказочное заморское яство',
+      hovered: 'Котэ не одобряет?'
+    },
     name: 'Нямушка',
     topping: 'с фуа-гра',
     featuresMapping: {
@@ -29,7 +32,10 @@ export const initialState = [
   },
   {
     id: uuidv4(),
-    description: 'Сказочное заморское яство',
+    descriptionMapping: {
+      default: 'Сказочное заморское яство',
+      hovered: 'Котэ не одобряет?'
+    },
     name: 'Нямушка',
     topping: 'с рыбой',
     featuresMapping: {
@@ -54,7 +60,10 @@ export const initialState = [
   },
   {
     id: uuidv4(),
-    description: 'Сказочное заморское яство',
+    descriptionMapping: {
+      default: 'Сказочное заморское яство',
+      hovered: 'Котэ не одобряет?'
+    },
     name: 'Нямушка',
     topping: 'с курой',
     featuresMapping: {
@@ -83,7 +92,7 @@ const reducer = (state, action) => {
   switch (action.type) {
     case TOGGLE_PRODUCT:
       return state.map((item) =>
-        item.id === action.payload
+        item.id === action.payload && !item.isFinished
           ? {...item, isSelected: !item.isSelected}
           : item
       );
