@@ -3,9 +3,16 @@ import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './product.module.scss';
 import { pluralize } from '../product/utils';
+import { useAppContext } from '../hooks';
+import { toggleProduct } from '../../state/actions';
 
 function Product({ product }) {
+  const { dispatch } = useAppContext();
+
+  const updateProduct = (productId) => () => dispatch(toggleProduct(productId));
+
   const {
+    id: productId,
     description,
     name,
     topping,
@@ -27,6 +34,7 @@ function Product({ product }) {
           [styles.ProductItemSelected]: isSelected,
           [styles.ProductItemDisabled]: isFinished,
         })}
+        onClick={updateProduct(productId)}
       >
         <figure className={styles.ProductContainer}>
           <h2 className={styles.ProductTitle}>{name}</h2>
@@ -50,18 +58,24 @@ function Product({ product }) {
           </figcaption>
         </figure>
       </label>
-      <input type="checkbox" id="cat-food" disabled={false} />
+      <input
+        type="checkbox"
+        id="cat-food"
+        disabled={isFinished}
+      />
       <p className={styles.ProductAnnotation}>
-        {isSelected
-          ? annotation
-          : isFinished
-          ? `Печалька, ${topping} закончился.`
-        : <>Порадуй котэ, <a href="#cat-food">купи</a>.</>}
+        {isSelected ? (
+          annotation
+        ) : isFinished ? (
+          `Печалька, ${topping} закончился.`
+        ) : (
+          <>
+            Порадуй котэ, <a href="#/" onClick={updateProduct(productId)}>купи</a>.
+          </>
+        )}
       </p>
     </li>
   );
 }
 
 export default Product;
-
-// {'<span>Чего сидишь? Порадуй котэ,</span><a href="#cat-food">купи.</a>'}
